@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#080808" />
+  <title>VORTEX SENSI | BEAST_STORE</title>
+  <style>
+    :root {
+      --bg: #070707;
+      --panel: #101010;
+      --panel-2: #151515;
+      --red: #ff303b;
+      --red-2: #a80012;
+      --red-glow: rgba(255, 35, 52, .34);
+      --text: #f5f5f5;
+      --muted: #888;
+      --line: rgba(255, 48, 59, .22);
+      --green: #62e6a2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 50% -10%, rgba(170,0,18,.25), transparent 45%),
+        linear-gradient(180deg, #050505 0%, #0c0c0e 55%, #050505 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      letter-spacing: .15px;
+    }
+    button, input { font: inherit; }
+    .shell { width: min(100%, 980px); margin: 0 auto; padding: 18px 14px 34px; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 13px 15px; border: 1px solid var(--line); border-radius: 16px;
+      background: rgba(12,12,12,.88); box-shadow: 0 8px 30px rgba(0,0,0,.35);
+      position: sticky; top: 8px; z-index: 5; backdrop-filter: blur(12px);
+    }
+    .brand { display:flex; align-items:center; gap:11px; min-width:0; }
+    .brand-mark {
+      width: 42px; height:42px; display:grid; place-items:center; border-radius:13px;
+      color:white; font-weight:950; font-style:italic; font-size:18px;
+      background: linear-gradient(145deg, #ff5962, #85000d 72%);
+      box-shadow: 0 0 22px var(--red-glow); border:1px solid rgba(255,255,255,.16);
+    }
+    .brand-name { font-weight:950; letter-spacing:1.5px; font-size:15px; white-space:nowrap; }
+    .brand-sub { color:var(--muted); font-size:10px; letter-spacing:2px; margin-top:2px; }
+    .status { display:flex; align-items:center; gap:7px; color:#bbb; font-size:11px; white-space:nowrap; }
+    .dot { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 10px rgba(98,230,162,.7); }
+    .hero { text-align:center; padding:29px 8px 20px; }
+    .eyebrow { color:#ff7078; font-size:10px; font-weight:800; letter-spacing:3px; }
+    h1 { margin:7px 0 5px; font-size:clamp(27px, 6vw, 43px); line-height:1.05; font-weight:1000; letter-spacing:1px; }
+    h1 span { color:var(--red); text-shadow:0 0 24px var(--red-glow); }
+    .hero p { margin:0; color:#999; font-size:12px; }
+    .grid { display:grid; grid-template-columns:1.2fr .8fr; gap:14px; align-items:start; }
+    .panel {
+      padding:17px; border:1px solid var(--line); border-radius:17px;
+      background:linear-gradient(155deg, rgba(22,22,22,.97), rgba(9,9,9,.98));
+      box-shadow:0 12px 30px rgba(0,0,0,.3), inset 0 1px rgba(255,255,255,.025);
+    }
+    .panel + .panel { margin-top:14px; }
+    .panel-title { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:15px; }
+    .panel-title h2 { margin:0; font-size:13px; text-transform:uppercase; letter-spacing:1.25px; }
+    .panel-title h2 b { color:var(--red); margin-right:7px; }
+    .tag { padding:5px 8px; border-radius:99px; border:1px solid var(--line); color:#ff7d84; font-size:9px; letter-spacing:1px; }
+    .field { padding:12px 0; border-top:1px solid rgba(255,255,255,.055); }
+    .field:first-of-type { border-top:0; }
+    .field-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:9px; }
+    .field-name { font-size:13px; font-weight:750; }
+    .value { color:#ff646d; font-size:12px; font-weight:900; font-variant-numeric:tabular-nums; }
+    input[type="range"] {
+      display:block; width:100%; height:7px; margin:0; border-radius:99px; outline:0;
+      appearance:none; -webkit-appearance:none; cursor:pointer;
+      background:linear-gradient(90deg, var(--red) 0%, #a50012 100%);
+      box-shadow:0 0 13px rgba(255,35,52,.16);
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      appearance:none; -webkit-appearance:none; width:18px; height:18px; border-radius:50%;
+      background:#ff424d; border:3px solid #ffd5d8; box-shadow:0 0 0 4px rgba(255,48,59,.15), 0 0 14px var(--red-glow);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width:13px; height:13px; border-radius:50%; background:#ff424d; border:3px solid #ffd5d8;
+      box-shadow:0 0 0 4px rgba(255,48,59,.15), 0 0 14px var(--red-glow);
+    }
+    .switch-list { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+    .switch-card {
+      display:flex; align-items:center; justify-content:space-between; gap:8px;
+      min-height:54px; padding:10px 11px; border:1px solid rgba(255,255,255,.08);
+      border-radius:12px; background:#0b0b0b;
+    }
+    .switch-label { font-size:12px; font-weight:750; }
+    .switch-note { font-size:9px; color:#777; margin-top:3px; }
+    .switch { position:relative; width:38px; height:21px; flex:0 0 auto; }
+    .switch input { opacity:0; width:0; height:0; }
+    .track { position:absolute; inset:0; cursor:pointer; border-radius:99px; background:#333; border:1px solid #555; transition:.2s; }
+    .track::before { content:""; position:absolute; width:13px; height:13px; left:3px; top:3px; border-radius:50%; background:#aaa; transition:.2s; }
+    .switch input:checked + .track { background:#8e0612; border-color:#ff3c49; box-shadow:0 0 12px rgba(255,48,59,.25); }
+    .switch input:checked + .track::before { transform:translateX(17px); background:#fff; }
+    .button-stack { display:grid; gap:10px; margin-top:14px; }
+    .action {
+      border:0; border-radius:12px; padding:14px 15px; cursor:pointer; color:white;
+      text-transform:uppercase; font-size:12px; font-weight:950; letter-spacing:1px;
+      background:linear-gradient(100deg, #8e0610, #ed2938 70%, #ff4a54);
+      box-shadow:0 7px 18px rgba(204,0,22,.2); transition:transform .15s, filter .15s;
+    }
+    .action:active { transform:scale(.985); filter:brightness(1.15); }
+    .action.secondary { background:#171717; border:1px solid var(--line); box-shadow:none; color:#eee; }
+    .action.ghost { background:transparent; border:1px solid rgba(255,255,255,.13); box-shadow:none; color:#aaa; }
+    .meter-wrap { padding:12px; border-radius:13px; border:1px solid rgba(255,255,255,.07); background:#0a0a0a; }
+    .meter-top { display:flex; justify-content:space-between; color:#aaa; font-size:10px; }
+    .meter { height:8px; background:#292929; border-radius:99px; overflow:hidden; margin-top:9px; }
+    .meter-fill { height:100%; width:0%; border-radius:99px; background:linear-gradient(90deg,#97000e,#ff4d58); transition:width .3s; }
+    .readout { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:12px; }
+    .readout-item { padding:11px; border-radius:11px; background:#0a0a0a; border:1px solid rgba(255,255,255,.06); }
+    .readout-item small { color:#777; font-size:9px; text-transform:uppercase; letter-spacing:1px; }
+    .readout-item strong { display:block; margin-top:4px; color:#ff626b; font-size:18px; }
+    .notice { margin-top:14px; padding:12px; border-radius:12px; background:rgba(255,48,59,.07); border:1px solid rgba(255,48,59,.17); color:#aaa; font-size:10px; line-height:1.55; }
+    .notice strong { color:#ff858b; }
+    .footer { text-align:center; padding:20px 8px 0; color:#555; font-size:9px; letter-spacing:1.5px; }
+    .toast { position:fixed; left:50%; bottom:22px; transform:translate(-50%,20px); opacity:0; pointer-events:none; z-index:10; padding:11px 15px; max-width:calc(100% - 30px); border-radius:12px; background:#1a1a1a; border:1px solid var(--line); color:#fff; font-size:12px; box-shadow:0 8px 30px #000; transition:.25s; text-align:center; }
+    .toast.show { opacity:1; transform:translate(-50%,0); }
+    @media (max-width:700px) { .grid { grid-template-columns:1fr; } .shell { padding:10px 10px 28px; } .panel { padding:14px; } }
+    @media (max-width:360px) { .switch-list { grid-template-columns:1fr; } .brand-name { font-size:13px; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">V</div>
+        <div>
+          <div class="brand-name">VORTEX SENSI</div>
+          <div class="brand-sub">PRODUÇÃO BEAST_STORE</div>
+        </div>
+      </div>
+      <div class="status"><span class="dot"></span> PAINEL ONLINE</div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">AIM CONTROL SYSTEM</div>
+      <h1>VORTEX<span>SENSI</span></h1>
+      <p>Central de ajustes • Interface futurista • Perfil personalizável</p>
+    </section>
+
+    <div class="grid">
+      <section>
+        <div class="panel">
+          <div class="panel-title"><h2><b>01</b> Ajustes principais</h2><span class="tag">0 — 100</span></div>
+          <div class="field">
+            <div class="field-head"><span class="field-name">Aimbot</span><output class="value" id="aimbotOut">90%</output></div>
+            <input type="range" min="0" max="100" value="90" id="aimbot" data-out="aimbotOut" />
+          </div>
+          <div class="field">
+            <div class="field-head"><span class="field-name">ESP</span><output class="value" id="espOut">65%</output></div>
+            <input type="range" min="0" max="100" value="65" id="esp" data-out="espOut" />
+          </div>
+          <div class="field">
+            <div class="field-head"><span class="field-name">Norecoil</span><output class="value" id="norecoilOut">75%</output></div>
+            <input type="range" min="0" max="100" value="75" id="norecoil" data-out="norecoilOut" />
+          </div>
+          <div class="field">
+            <div class="field-head"><span class="field-name">Aimlock</span><output class="value" id="aimlockOut">80%</output></div>
+            <input type="range" min="0" max="100" value="80" id="aimlock" data-out="aimlockOut" />
+          </div>
+          <div class="field">
+            <div class="field-head"><span class="field-name">AimFOV</span><output class="value" id="aimfovOut">90%</output></div>
+            <input type="range" min="0" max="100" value="90" id="aimfov" data-out="aimfovOut" />
+          </div>
+          <div class="field">
+            <div class="field-head"><span class="field-name">Campo de visão</span><output class="value" id="fovOut">90</output></div>
+            <input type="range" min="0" max="120" value="90" id="fov" data-out="fovOut" />
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title"><h2><b>02</b> Recursos extras</h2><span class="tag">CONTROLES</span></div>
+          <div class="switch-list">
+            <div class="switch-card"><div><div class="switch-label">Calibrar mira</div><div class="switch-note">Ajuste de perfil</div></div><label class="switch"><input type="checkbox" id="calibrar"><span class="track"></span></label></div>
+            <div class="switch-card"><div><div class="switch-label">Mira estável</div><div class="switch-note">Indicador de estabilidade</div></div><label class="switch"><input type="checkbox" id="estavel"><span class="track"></span></label></div>
+            <div class="switch-card"><div><div class="switch-label">Resposta rápida</div><div class="switch-note">Perfil de toque</div></div><label class="switch"><input type="checkbox" id="toque"><span class="track"></span></label></div>
+            <div class="switch-card"><div><div class="switch-label">120 Hz</div><div class="switch-note">Preferência de tela</div></div><label class="switch"><input type="checkbox" id="hz120"><span class="track"></span></label></div>
+            <div class="switch-card"><div><div class="switch-label">Redução de tremor</div><div class="switch-note">Auxílio de treino</div></div><label class="switch"><input type="checkbox" id="tremor"><span class="track"></span></label></div>
+            <div class="switch-card"><div><div class="switch-label">Modo precisão</div><div class="switch-note">Perfil personalizado</div></div><label class="switch"><input type="checkbox" id="precisao"><span class="track"></span></label></div>
+          </div>
+          <div class="button-stack">
+            <button class="action" id="applyBtn">Aplicar configuração</button>
+            <button class="action secondary" id="randomBtn">Gerar perfil aleatório</button>
+            <button class="action ghost" id="resetBtn">Restaurar padrão</button>
+          </div>
+        </div>
+      </section>
+
+      <aside>
+        <div class="panel">
+          <div class="panel-title"><h2><b>03</b> Status do perfil</h2><span class="tag" id="profileTag">PRONTO</span></div>
+          <div class="meter-wrap">
+            <div class="meter-top"><span>Nível médio dos ajustes</span><strong id="averageText">82%</strong></div>
+            <div class="meter"><div class="meter-fill" id="averageFill"></div></div>
+          </div>
+          <div class="readout">
+            <div class="readout-item"><small>Controles ligados</small><strong id="activeCount">0</strong></div>
+            <div class="readout-item"><small>Perfil</small><strong id="profileName">V1</strong></div>
+            <div class="readout-item"><small>FOV</small><strong id="fovReadout">90</strong></div>
+            <div class="readout-item"><small>Taxa tela</small><strong id="hzReadout">Padrão</strong></div>
+          </div>
+          <div class="notice"><strong>BEAST_STORE / VORTEX SENSI</strong><br>Este é um painel de demonstração. Os controles alteram somente os valores exibidos nesta página; não acessam o Free Fire, não modificam o jogo e não injetam arquivos.</div>
+        </div>
+        <div class="panel">
+          <div class="panel-title"><h2><b>04</b> Atalhos</h2><span class="tag">RÁPIDO</span></div>
+          <div class="button-stack" style="margin-top:0">
+            <button class="action secondary" id="trainingBtn">Iniciar treino de mira</button>
+            <button class="action secondary" id="copyBtn">Copiar valores</button>
+          </div>
+          <div class="notice" id="trainingInfo">Treino: ainda não iniciado. Use o botão para iniciar um cronômetro curto de prática.</div>
+        </div>
+      </aside>
+    </div>
+    <div class="footer">VORTEX SENSI • BEAST_STORE • PERSONALIZE COM RESPONSABILIDADE</div>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const rangeIds = ['aimbot', 'esp', 'norecoil', 'aimlock', 'aimfov', 'fov'];
+    const toggleIds = ['calibrar', 'estavel', 'toque', 'hz120', 'tremor', 'precisao'];
+    const defaults = { aimbot:90, esp:65, norecoil:75, aimlock:80, aimfov:90, fov:90 };
+    let profileNumber = 1;
+    let trainingTimer = null;
+
+    const $ = (id) => document.getElementById(id);
+    const toast = (message) => {
+      $('toast').textContent = message;
+      $('toast').classList.add('show');
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => $('toast').classList.remove('show'), 2500);
+    };
+
+    function updateRange(input) {
+      const out = $(input.dataset.out);
+      out.textContent = input.id === 'fov' ? input.value : input.value + '%';
+      updateDashboard();
+    }
+
+    function updateDashboard() {
+      const values = rangeIds.filter(id => id !== 'fov').map(id => Number($(id).value));
+      const average = Math.round(values.reduce((sum, value) => sum + value, 0) / values.length);
+      const active = toggleIds.filter(id => $(id).checked).length;
+      $('averageText').textContent = average + '%';
+      $('averageFill').style.width = average + '%';
+      $('activeCount').textContent = active;
+      $('fovReadout').textContent = $('fov').value;
+      $('hzReadout').textContent = $('hz120').checked ? '120 Hz*' : 'Padrão';
+      $('profileTag').textContent = active > 0 ? 'AJUSTADO' : 'PRONTO';
+    }
+
+    rangeIds.forEach(id => {
+      const input = $(id);
+      input.addEventListener('input', () => updateRange(input));
+      updateRange(input);
+    });
+    toggleIds.forEach(id => $(id).addEventListener('change', updateDashboard));
+
+    $('applyBtn').addEventListener('click', () => {
+      const settings = {};
+      rangeIds.forEach(id => settings[id] = Number($(id).value));
+      toggleIds.forEach(id => settings[id] = $(id).checked);
+      try { localStorage.setItem('vortexsensi-profile', JSON.stringify(settings)); } catch (e) { /* armazenamento pode estar bloqueado */ }
+      $('profileName').textContent = 'V' + profileNumber;
+      toast('Perfil salvo neste painel com sucesso.');
+    });
+
+    $('randomBtn').addEventListener('click', () => {
+      rangeIds.forEach(id => {
+        $(id).value = id === 'fov' ? Math.floor(65 + Math.random() * 46) : Math.floor(35 + Math.random() * 61);
+        updateRange($(id));
+      });
+      toggleIds.forEach(id => $(id).checked = Math.random() > .5);
+      profileNumber++;
+      $('profileName').textContent = 'V' + profileNumber;
+      updateDashboard();
+      toast('Novo perfil de demonstração gerado.');
+    });
+
+    $('resetBtn').addEventListener('click', () => {
+      Object.entries(defaults).forEach(([id, value]) => { $(id).value = value; updateRange($(id)); });
+      toggleIds.forEach(id => $(id).checked = false);
+      profileNumber = 1;
+      $('profileName').textContent = 'V1';
+      updateDashboard();
+      toast('Configurações restauradas.');
+    });
+
+    $('copyBtn').addEventListener('click', async () => {
+      const lines = rangeIds.map(id => id.toUpperCase() + ': ' + $(id).value).concat(toggleIds.map(id => id.toUpperCase() + ': ' + ($(id).checked ? 'ON' : 'OFF')));
+      const content = 'VORTEX SENSI | BEAST_STORE\n' + lines.join('\n');
+      try {
+        await navigator.clipboard.writeText(content);
+        toast('Valores copiados.');
+      } catch (e) {
+        toast('A cópia automática não está disponível neste navegador.');
+      }
+    });
+
+    $('trainingBtn').addEventListener('click', () => {
+      if (trainingTimer) {
+        clearInterval(trainingTimer);
+        trainingTimer = null;
+        $('trainingBtn').textContent = 'Iniciar treino de mira';
+        $('trainingInfo').textContent = 'Treino pausado. Faça uma pausa e retome quando estiver pronto.';
+        return;
+      }
+      let seconds = 30;
+      $('trainingBtn').textContent = 'Encerrar treino';
+      $('trainingInfo').textContent = 'Treino iniciado: pratique acompanhar um alvo no modo de treinamento por ' + seconds + ' segundos.';
+      trainingTimer = setInterval(() => {
+        seconds--;
+        if (seconds <= 0) {
+          clearInterval(trainingTimer);
+          trainingTimer = null;
+          $('trainingBtn').textContent = 'Iniciar treino de mira';
+          $('trainingInfo').textContent = 'Treino concluído! Registre como foi sua precisão e faça uma pausa.';
+          toast('Treino de 30 segundos concluído!');
+        } else {
+          $('trainingInfo').textContent = 'Treino em andamento: ' + seconds + ' segundos restantes. Mantenha o foco e acompanhe o alvo.';
+        }
+      }, 1000);
+    });
+
+    updateDashboard();
+  </script>
+</body>
+                                                                                                                                                                                                  </html>
+                                                                                                                                                                                                  
